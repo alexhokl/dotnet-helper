@@ -1,7 +1,7 @@
 language: csharp
 solution: Alexhokl.Helper.sln
 
-mono: no
+mono: none
 os: linux
 dist: trusty
 sudo: required
