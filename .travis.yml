@@ -5,7 +5,7 @@ mono: none
 os: linux
 dist: trusty
 sudo: required
-dotnet: 1.0.0-preview2-003121
+dotnet: 2.0.0
 
 script:
   - dotnet new
