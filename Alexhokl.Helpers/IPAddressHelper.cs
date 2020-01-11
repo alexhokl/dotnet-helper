@@ -27,7 +27,7 @@ namespace Alexhokl.Helpers
 
             byte[] networkAddressBytes = new byte[addressBytes.Length];
             Parallel.For(
-                0, networkAddressBytes.Length, i => 
+                0, networkAddressBytes.Length, i =>
                     networkAddressBytes[i] = (byte)(addressBytes[i] & maskBytes[i]));
             return new IPAddress(networkAddressBytes);
         }

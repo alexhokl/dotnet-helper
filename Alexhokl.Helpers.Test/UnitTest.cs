@@ -75,7 +75,7 @@ namespace Alexhokl.Helpers.Test
             IPAddress mask = IPAddress.Parse("255.255.255.0");
 
             Assert.AreEqual<string>(
-                "192.168.1.0", 
+                "192.168.1.0",
                 IPAddressHelper.GetNetworkAddress(address, mask).ToString());
         }
 
@@ -92,10 +92,10 @@ namespace Alexhokl.Helpers.Test
                 string secret = "This is the secret.";
                 byte[] dataBytes = Encoding.UTF8.GetBytes(secret);
 
-                byte[] encryptedData = 
+                byte[] encryptedData =
                     CryptographyHelper.Encrypt(
                         dataBytes, key, initializationVector, SymmetricEncryptionMethod.DES);
-                byte[] decrptedData = 
+                byte[] decrptedData =
                     CryptographyHelper.Decrypt(
                         encryptedData, key, initializationVector, SymmetricEncryptionMethod.DES);
 
@@ -162,10 +162,10 @@ namespace Alexhokl.Helpers.Test
                 string secret = "This is the secret.";
                 byte[] dataBytes = Encoding.UTF8.GetBytes(secret);
 
-                byte[] encryptedData = 
+                byte[] encryptedData =
                     CryptographyHelper.Encrypt(
                         dataBytes, key, initializationVector, SymmetricEncryptionMethod.AES);
-                byte[] decrptedData = 
+                byte[] decrptedData =
                     CryptographyHelper.Decrypt(
                         encryptedData, key, initializationVector, SymmetricEncryptionMethod.AES);
 
@@ -192,7 +192,7 @@ namespace Alexhokl.Helpers.Test
                 "+rX77g==",
                 Convert.ToBase64String(
                     CryptographyHelper.GetHash(
-                        Encoding.UTF8.GetBytes(secret), 
+                        Encoding.UTF8.GetBytes(secret),
                         HashMethod.CRC32)));
         }
 

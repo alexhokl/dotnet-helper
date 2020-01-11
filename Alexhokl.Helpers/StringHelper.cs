@@ -51,14 +51,14 @@ namespace Alexhokl.Helpers
 
             return
                 strings
-                    .Where(s => 
+                    .Where(s =>
                         !string.IsNullOrWhiteSpace(s))
                     .Aggregate((concat, i) =>
                         string.Format(
-                            "{0}{1}{2}", 
-                            concat.ToLower(),  
-                            i.Length == 1 && i.ToUpper().Equals(i) ? 
-                                 delimiter : 
+                            "{0}{1}{2}",
+                            concat.ToLower(),
+                            i.Length == 1 && i.ToUpper().Equals(i) ?
+                                 delimiter :
                                 string.Empty,
                             i.ToLower()));
         }
