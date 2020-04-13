@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 
@@ -83,6 +86,38 @@ namespace Alexhokl.Helpers
             }
 
             return list;
+        }
+
+        public static string Zip(string text)
+        {
+            var buffer = Encoding.UTF8.GetBytes(text);
+            var memoryStream = new MemoryStream();
+            using (var gZipStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
+            {
+                gZipStream.Write(buffer, 0, buffer.Length);
+            }
+
+            memoryStream.Position = 0;
+
+            var compressedData = new byte[memoryStream.Length];
+            memoryStream.Read(compressedData, 0, compressedData.Length);
+
+            var gZipBuffer = memoryStream.ToArray();
+            return Convert.ToBase64String(gZipBuffer);
+        }
+
+        public static string Unzip(string compressedText)
+        {
+            var gZipBuffer = Convert.FromBase64String(compressedText);
+            using (var inputStream = new MemoryStream(gZipBuffer))
+            using (var gZipStream = new GZipStream(inputStream, CompressionMode.Decompress))
+            using (var outputStream = new MemoryStream())
+            {
+                gZipStream.CopyTo(outputStream);
+
+                var outputBytes = outputStream.ToArray();
+                return Encoding.UTF8.GetString(outputBytes);
+            }
         }
     }
 }
