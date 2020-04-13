@@ -19,6 +19,15 @@ namespace Alexhokl.Helpers.Tests
             var unzippedStr = StringHelper.Unzip(input);
             Assert.Equal(expected, unzippedStr);
         }
+
+        [Theory]
+        [InlineData("Test", "-", "test")]
+        [InlineData("TestCase", "-", "test-case")]
+        [InlineData("MyTest", "-", "my-test")]
+        public void ToDelimitedString(string input, string delimiter, string expected)
+        {
+            Assert.Equal(expected, StringHelper.ToDelimitedString(input, delimiter));
+        }
     }
 }
 

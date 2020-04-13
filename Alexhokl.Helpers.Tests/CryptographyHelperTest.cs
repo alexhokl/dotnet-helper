@@ -1,90 +1,18 @@
-﻿using System;
+using System;
 using System.Security.Cryptography;
-using System.Net;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
-
-namespace Alexhokl.Helpers.Test
+namespace Alexhokl.Helpers.Tests
 {
-    /// <summary>
-    /// Summary description for UnitTest1
-    /// </summary>
-    [TestClass]
-    public class UnitTest
+    public class CryptographyHelperTest
     {
-        public UnitTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
-
-        [TestMethod]
-        public void TestToDelimitedString()
-        {
-            Assert.AreEqual<string>("test", StringHelper.ToDelimitedString("Test", "-"));
-            Assert.AreEqual<string>("test-case", StringHelper.ToDelimitedString("TestCase", "-"));
-            Assert.AreEqual<string>("my-test", StringHelper.ToDelimitedString("MyTest", "-"));
-        }
-
-        [TestMethod]
-        public void TestGetNetworkAddress()
-        {
-            IPAddress address = IPAddress.Parse("192.168.1.100");
-            IPAddress mask = IPAddress.Parse("255.255.255.0");
-
-            Assert.AreEqual<string>(
-                "192.168.1.0",
-                IPAddressHelper.GetNetworkAddress(address, mask).ToString());
-        }
-
-        [TestMethod]
-        public void TestDes()
+        [Fact]
+        public void Des()
         {
             using (DESCryptoServiceProvider provider = new DESCryptoServiceProvider())
             {
-                // retrieves the new pair of key and IV created 
+                // retrieves the new pair of key and IV created
                 // upon creation on the provider
                 byte[] key = provider.Key;
                 byte[] initializationVector = provider.IV;
@@ -101,7 +29,7 @@ namespace Alexhokl.Helpers.Test
 
                 string decryptedSecret = Encoding.UTF8.GetString(decrptedData);
 
-                Assert.AreEqual<string>(secret, decryptedSecret);
+                Assert.Equal(secret, decryptedSecret);
 
                 encryptedData =
                     CryptographyHelper.Encrypt(
@@ -110,16 +38,16 @@ namespace Alexhokl.Helpers.Test
                     CryptographyHelper.DecryptToString(
                         encryptedData, key, initializationVector, SymmetricEncryptionMethod.DES, Encoding.UTF8);
 
-                Assert.AreEqual<string>(secret, decryptedSecret);
+                Assert.Equal(secret, decryptedSecret);
             }
         }
 
-        [TestMethod]
-        public void TestTripleDes()
+        [Fact]
+        public void TripleDes()
         {
             using (TripleDESCryptoServiceProvider provider = new TripleDESCryptoServiceProvider())
             {
-                // retrieves the new pair of key and IV created 
+                // retrieves the new pair of key and IV created
                 // upon creation on the provider
                 byte[] key = provider.Key;
                 byte[] initializationVector = provider.IV;
@@ -136,7 +64,7 @@ namespace Alexhokl.Helpers.Test
 
                 string decryptedSecret = Encoding.UTF8.GetString(decrptedData);
 
-                Assert.AreEqual<string>(secret, decryptedSecret);
+                Assert.Equal(secret, decryptedSecret);
 
                 encryptedData =
                     CryptographyHelper.Encrypt(
@@ -145,16 +73,16 @@ namespace Alexhokl.Helpers.Test
                     CryptographyHelper.DecryptToString(
                         encryptedData, key, initializationVector, SymmetricEncryptionMethod.TripleDES, Encoding.UTF8);
 
-                Assert.AreEqual<string>(secret, decryptedSecret);
+                Assert.Equal(secret, decryptedSecret);
             }
         }
 
-        [TestMethod]
-        public void TestAes()
+        [Fact]
+        public void Aes()
         {
             using (AesCryptoServiceProvider provider = new AesCryptoServiceProvider())
             {
-                // retrieves the new pair of key and IV created 
+                // retrieves the new pair of key and IV created
                 // upon creation on the provider
                 byte[] key = provider.Key;
                 byte[] initializationVector = provider.IV;
@@ -171,7 +99,7 @@ namespace Alexhokl.Helpers.Test
 
                 string decryptedSecret = Encoding.UTF8.GetString(decrptedData);
 
-                Assert.AreEqual<string>(secret, decryptedSecret);
+                Assert.Equal(secret, decryptedSecret);
 
                 encryptedData =
                     CryptographyHelper.Encrypt(
@@ -180,15 +108,15 @@ namespace Alexhokl.Helpers.Test
                     CryptographyHelper.DecryptToString(
                         encryptedData, key, initializationVector, SymmetricEncryptionMethod.AES, Encoding.UTF8);
 
-                Assert.AreEqual<string>(secret, decryptedSecret);
+                Assert.Equal(secret, decryptedSecret);
             }
         }
 
-        [TestMethod]
-        public void TestCrc()
+        [Fact]
+        public void Crc()
         {
             string secret = "This is the secret.";
-            Assert.AreEqual<string>(
+            Assert.Equal(
                 "+rX77g==",
                 Convert.ToBase64String(
                     CryptographyHelper.GetHash(
@@ -196,12 +124,12 @@ namespace Alexhokl.Helpers.Test
                         HashMethod.CRC32)));
         }
 
-        [TestMethod]
-        public void TestRijndael()
+        [Fact]
+        public void Rijndael()
         {
             using (RijndaelManaged provider = new RijndaelManaged())
             {
-                // retrieves the new pair of key and IV created 
+                // retrieves the new pair of key and IV created
                 // upon creation on the provider
                 byte[] key = provider.Key;
                 byte[] initializationVector = provider.IV;
@@ -218,7 +146,7 @@ namespace Alexhokl.Helpers.Test
 
                 string decryptedSecret = Encoding.UTF8.GetString(decrptedData);
 
-                Assert.AreEqual<string>(secret, decryptedSecret);
+                Assert.Equal(secret, decryptedSecret);
 
                 encryptedData =
                     CryptographyHelper.Encrypt(
@@ -227,8 +155,11 @@ namespace Alexhokl.Helpers.Test
                     CryptographyHelper.DecryptToString(
                         encryptedData, key, initializationVector, SymmetricEncryptionMethod.Rijndael, Encoding.UTF8);
 
-                Assert.AreEqual<string>(secret, decryptedSecret);
+                Assert.Equal(secret, decryptedSecret);
             }
         }
     }
 }
+
+
+
