@@ -13,6 +13,9 @@ namespace Alexhokl.Helpers.NPOI
         /// <param name="cellValue">The cell value.</param>
         public static void AddCell(this IRow row, object cellValue)
         {
+            if (row == null)
+                throw new ArgumentNullException(nameof(row));
+
             ICell cell = row.GetCell(row.PhysicalNumberOfCells);
             if (cell == null)
                 cell = row.CreateCell(row.PhysicalNumberOfCells);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace Alexhokl.Helpers
         /// <param name="camelCaseString">The camel case string.</param>
         /// <param name="delimiter">The delimiter.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308: Normalize strings to uppercase")]
         public static string ToDelimitedString(this string camelCaseString, string delimiter)
         {
             Regex regex = new Regex("([A-Z])");
@@ -49,7 +51,7 @@ namespace Alexhokl.Helpers
 
             if (strings.Length == 1)
             {
-                return strings.FirstOrDefault().ToLower();
+                return strings.FirstOrDefault().ToLower(CultureInfo.InvariantCulture);
             }
 
             return
@@ -59,11 +61,11 @@ namespace Alexhokl.Helpers
                     .Aggregate((concat, i) =>
                         string.Format(
                             "{0}{1}{2}",
-                            concat.ToLower(),
-                            i.Length == 1 && i.ToUpper().Equals(i) ?
+                            concat.ToLower(CultureInfo.InvariantCulture),
+                            i.Length == 1 && i.ToUpper(CultureInfo.InvariantCulture).Equals(i, StringComparison.InvariantCulture) ?
                                  delimiter :
                                 string.Empty,
-                            i.ToLower()));
+                            i.ToLower(CultureInfo.InvariantCulture)));
         }
 
         /// <summary>
@@ -73,6 +75,9 @@ namespace Alexhokl.Helpers
         /// <returns></returns>
         public static List<int> ToNumberList(this string numberListString)
         {
+            if (numberListString == null)
+                throw new ArgumentNullException(nameof(numberListString));
+
             string[] portalIdArray =
                 numberListString.Split(
                     new char[] { ',' },

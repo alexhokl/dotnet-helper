@@ -77,7 +77,7 @@ namespace Alexhokl.Helpers.Data.Olap
                 }
                 columns.Append(" ON COLUMNS,");
                 columnsStr = columns.ToString();
-                index = columnsStr.LastIndexOf(", ");
+                index = columnsStr.LastIndexOf(", ", StringComparison.InvariantCulture);
                 if (index >= 0)
                     columnsStr = columnsStr.Remove(index, 2);
                 #endregion
@@ -91,7 +91,7 @@ namespace Alexhokl.Helpers.Data.Olap
                 }
                 rows.Append(" ON ROWS");
                 rowsStr = rows.ToString();
-                index = rowsStr.LastIndexOf(", ");
+                index = rowsStr.LastIndexOf(", ", StringComparison.InvariantCulture);
                 if (index >= 0)
                     rowsStr = rowsStr.Remove(index, 2);
                 #endregion
@@ -105,7 +105,7 @@ namespace Alexhokl.Helpers.Data.Olap
                     slicers.Append(", ");
                 }
                 slicersStr = slicers.ToString();
-                index = slicersStr.LastIndexOf(", ");
+                index = slicersStr.LastIndexOf(", ", StringComparison.InvariantCulture);
                 if (index >= 0)
                     slicersStr = slicersStr.Remove(index, 2);
                 #endregion

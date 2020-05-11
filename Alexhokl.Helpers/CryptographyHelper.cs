@@ -20,8 +20,10 @@ namespace Alexhokl.Helpers
         /// <returns></returns>
         public static byte[] GetHash(byte[] data, HashMethod method)
         {
-            HashAlgorithm alogrithm = GetHashAlogrithm(method);
-            return alogrithm.ComputeHash(data);
+            using (var alogrithm = GetHashAlogrithm(method))
+            {
+                return alogrithm.ComputeHash(data);
+            }
         }
 
         /// <summary>
@@ -32,8 +34,10 @@ namespace Alexhokl.Helpers
         /// <returns></returns>
         public static byte[] GetHash(Stream data, HashMethod method)
         {
-            HashAlgorithm alogirthm = GetHashAlogrithm(method);
-            return alogirthm.ComputeHash(data);
+            using (var alogirthm = GetHashAlogrithm(method))
+            {
+                return alogirthm.ComputeHash(data);
+            }
         }
 
         /// <summary>
@@ -67,8 +71,13 @@ namespace Alexhokl.Helpers
         /// <returns></returns>
         public static byte[] GetHash(string data, HashMethod method, Encoding encoding)
         {
-            HashAlgorithm alogrithm = GetHashAlogrithm(method);
+            if (encoding == null)
+                throw new ArgumentNullException(nameof(encoding));
+
+            using (var alogrithm = GetHashAlogrithm(method))
+            {
             return alogrithm.ComputeHash(encoding.GetBytes(data));
+            }
         }
 
         /// <summary>
@@ -130,9 +139,12 @@ namespace Alexhokl.Helpers
         public static byte[] Encrypt(
             byte[] data, byte[] key, byte[] initializationVector, SymmetricEncryptionMethod method)
         {
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
             using (SymmetricAlgorithm provider = GetSymmetricEncryptionAlgorithm(method))
             {
-                // assigned the specified key and IV as 
+                // assigned the specified key and IV as
                 // a pair is created upon creation of the provider
                 provider.Key = key;
                 provider.IV = initializationVector;
@@ -163,7 +175,7 @@ namespace Alexhokl.Helpers
         {
             using (SymmetricAlgorithm provider = GetSymmetricEncryptionAlgorithm(method))
             {
-                // assigned the specified key and IV as 
+                // assigned the specified key and IV as
                 // a pair is created upon creation of the provider
                 provider.Key = key;
                 provider.IV = initializationVector;
@@ -195,6 +207,9 @@ namespace Alexhokl.Helpers
         public static byte[] Encrypt(
             string data, byte[] key, byte[] initializationVector, SymmetricEncryptionMethod method, Encoding encoding)
         {
+            if (encoding == null)
+                throw new ArgumentNullException(nameof(encoding));
+
             return Encrypt(encoding.GetBytes(data), key, initializationVector, method);
         }
 
@@ -210,6 +225,9 @@ namespace Alexhokl.Helpers
         public static string DecryptToString(
             byte[] encryptedData, byte[] key, byte[] initializationVector, SymmetricEncryptionMethod method, Encoding encoding)
         {
+            if (encoding == null)
+                throw new ArgumentNullException(nameof(encoding));
+
             byte[] decryptedBytes = Decrypt(encryptedData, key, initializationVector, method);
             return encoding.GetString(decryptedBytes);
         }

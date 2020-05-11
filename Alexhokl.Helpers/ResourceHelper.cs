@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace Alexhokl.Helpers
@@ -15,6 +16,9 @@ namespace Alexhokl.Helpers
 
         public static string GetManifestResourceText(Assembly assembly, string resourceName)
         {
+            if (assembly == null)
+                throw new ArgumentNullException(nameof(assembly));
+
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             {
                 using (var reader = new StreamReader(stream))

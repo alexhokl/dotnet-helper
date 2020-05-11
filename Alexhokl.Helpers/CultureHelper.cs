@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 
 namespace Alexhokl.Helpers
@@ -12,6 +13,9 @@ namespace Alexhokl.Helpers
         /// <returns></returns>
         public static string GetNeutralCultureName(this CultureInfo culture)
         {
+            if (culture == null)
+                throw new ArgumentNullException(nameof(culture));
+
             if (culture.IsNeutralCulture)
                 return culture.Name;
 

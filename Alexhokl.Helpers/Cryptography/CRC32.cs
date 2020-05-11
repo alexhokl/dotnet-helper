@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -9,14 +10,13 @@ namespace Alexhokl.Helpers.Cryptography
     /// Cyclic Redundancy Check (CRC32) HashAlgorithm
     /// </summary>
     /// <remarks>Please note that the copyright of the code of this class belongs to Phil Bolduc</remarks>
-    /// <see cref="http://www.codeproject.com/Articles/2380/Cyclic-Redundancy-Check-CRC32-HashAlgorithm"/>
     public class CRC32 : HashAlgorithm
     {
-        protected static uint AllOnes = 0xffffffff;
-        protected static Hashtable cachedCRC32Tables;
-        protected static bool autoCache;
+        protected const uint AllOnes = 0xffffffff;
+        private static Hashtable cachedCRC32Tables = Hashtable.Synchronized(new Hashtable());
+        private static bool autoCache = true;
 
-        protected uint[] crc32Table;
+        private uint[] crc32Table;
         private uint m_crc;
 
         /// <summary>
@@ -36,15 +36,6 @@ namespace Alexhokl.Helpers.Cryptography
             set { autoCache = value; }
         }
 
-        /// <summary>
-        /// Initialize the cache
-        /// </summary>
-        static CRC32()
-        {
-            cachedCRC32Tables = Hashtable.Synchronized(new Hashtable());
-            autoCache = true;
-        }
-
         public static void ClearCache()
         {
             cachedCRC32Tables.Clear();
@@ -61,7 +52,7 @@ namespace Alexhokl.Helpers.Cryptography
             uint dwCrc;
             uint[] table = new uint[256];
 
-            // 256 values representing ASCII character codes. 
+            // 256 values representing ASCII character codes.
             for (int i = 0; i < 256; i++)
             {
                 dwCrc = (uint)i;
@@ -88,7 +79,7 @@ namespace Alexhokl.Helpers.Cryptography
         }
 
         /// <summary>
-        /// Creates a CRC32 object using the specified Creates a CRC32 object 
+        /// Creates a CRC32 object using the specified Creates a CRC32 object
         /// </summary>
         public CRC32(uint aPolynomial)
             : this(aPolynomial, CRC32.AutoCache)
@@ -96,7 +87,7 @@ namespace Alexhokl.Helpers.Cryptography
         }
 
         /// <summary>
-        /// Construct the 
+        /// Construct the
         /// </summary>
         public CRC32(uint aPolynomial, bool cacheTable)
         {
@@ -121,14 +112,17 @@ namespace Alexhokl.Helpers.Cryptography
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
         protected override void HashCore(byte[] buffer, int offset, int count)
         {
-            // Save the text in the buffer. 
+            if (buffer == null)
+                throw new ArgumentNullException(nameof(buffer));
+
+            // Save the text in the buffer.
             for (int i = offset; i < count; i++)
             {
                 ulong tabPtr = (m_crc & 0xFF) ^ buffer[i];
@@ -138,7 +132,7 @@ namespace Alexhokl.Helpers.Cryptography
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         protected override byte[] HashFinal()
@@ -159,6 +153,9 @@ namespace Alexhokl.Helpers.Cryptography
         /// </summary>
         new public byte[] ComputeHash(Stream inputStream)
         {
+            if (inputStream == null)
+                throw new ArgumentNullException(nameof(inputStream));
+
             byte[] buffer = new byte[4096];
             int bytesRead;
             while ((bytesRead = inputStream.Read(buffer, 0, 4096)) > 0)
@@ -174,6 +171,9 @@ namespace Alexhokl.Helpers.Cryptography
         /// </summary>
         new public byte[] ComputeHash(byte[] buffer)
         {
+            if (buffer == null)
+                throw new ArgumentNullException(nameof(buffer));
+
             return ComputeHash(buffer, 0, buffer.Length);
         }
 

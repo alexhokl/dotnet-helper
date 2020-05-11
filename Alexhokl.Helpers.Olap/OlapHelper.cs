@@ -15,11 +15,14 @@ namespace Alexhokl.Helpers
         /// <returns></returns>
         public static DataSet GetData(AdomdConnection conn, string mdxQuery)
         {
-            DataSet ds = new DataSet();
-            AdomdCommand cmd = new AdomdCommand(mdxQuery, conn);
-            AdomdDataAdapter da = new AdomdDataAdapter(cmd);
-            da.Fill(ds);
-            return ModifyDataType(ds, typeof(System.Decimal));
+            using (var ds = new DataSet())
+            using (AdomdCommand cmd = new AdomdCommand(mdxQuery, conn))
+            using (AdomdDataAdapter da = new AdomdDataAdapter(cmd))
+            {
+                da.Fill(ds);
+                return ModifyDataType(ds, typeof(System.Decimal));
+            }
+
         }
 
         #region helper methods

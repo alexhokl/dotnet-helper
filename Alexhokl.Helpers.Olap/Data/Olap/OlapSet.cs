@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
-
 using Microsoft.AnalysisServices.AdomdClient;
 
 
@@ -29,7 +29,7 @@ namespace Alexhokl.Helpers.Data.Olap
             }
             builder.Append("}");
             string str = builder.ToString();
-            int index = str.LastIndexOf(", ");
+            int index = str.LastIndexOf(", ", StringComparison.InvariantCulture);
             if (index >= 0)
                 str = str.Remove(index, 2);
             return str;

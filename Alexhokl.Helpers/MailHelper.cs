@@ -29,22 +29,24 @@ namespace Alexhokl.Helpers
             {
                 MailAddress from = new MailAddress(mailFrom, senderName);
                 MailAddress to = new MailAddress(mailTo);
-                MailMessage message = new MailMessage(from, to);
-                if (!string.IsNullOrWhiteSpace(mailCc))
+                using (var message = new MailMessage(from, to))
                 {
-                    message.CC.Add(mailCc);
-                }
+                    if (!string.IsNullOrWhiteSpace(mailCc))
+                    {
+                        message.CC.Add(mailCc);
+                    }
 
-                message.Subject = subject;
-                message.IsBodyHtml = true;
-                message.Body = body;
+                    message.Subject = subject;
+                    message.IsBodyHtml = true;
+                    message.Body = body;
 
-                using (SmtpClient smtpClient = new SmtpClient(smtp))
-                {
-                    smtpClient.UseDefaultCredentials = false;
-                    smtpClient.Credentials = new NetworkCredential(smtpUser, smtpPassword);
-                    smtpClient.Port = smtpPort;
-                    smtpClient.Send(message);
+                    using (SmtpClient smtpClient = new SmtpClient(smtp))
+                    {
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.Credentials = new NetworkCredential(smtpUser, smtpPassword);
+                        smtpClient.Port = smtpPort;
+                        smtpClient.Send(message);
+                    }
                 }
             }
             catch (SmtpFailedRecipientException failedRecipientEx)

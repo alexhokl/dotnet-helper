@@ -1,9 +1,9 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System;
+using System.Globalization;
 using System.Net;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
 
 namespace Alexhokl.Helpers
 {
@@ -31,6 +31,10 @@ namespace Alexhokl.Helpers
         /// <returns></returns>
         public static string Translate(string input, CultureInfo inputCulture, CultureInfo outputCulture, WebProxy proxy)
         {
+            if (inputCulture == null)
+                throw new ArgumentNullException(nameof(inputCulture));
+            if (outputCulture == null)
+                throw new ArgumentNullException(nameof(outputCulture));
             // Todo: Please update to use the new URL instead
             // see https://developers.google.com/translate/v2/getting_started
 

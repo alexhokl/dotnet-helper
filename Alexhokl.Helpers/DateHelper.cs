@@ -25,17 +25,18 @@ namespace Alexhokl.Helpers
         /// Returns a string specifying the given date. (e.g. 23rd August, 2007)
         /// </summary>
         /// <param name="date">Date</param>
+        /// <param name="format">Date format</param>
         /// <returns></returns>
-        public static string GetOldEnglishStyleDate(this DateTime date, Formats format)
+        public static string GetOldEnglishStyleDate(this DateTime date, Format format)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(GetOldEnglishStyleDay(date.Day));
             switch (format)
             {
-                case Formats.DM:
+                case Format.DM:
                     builder.Append(" " + date.ToString("MMMM", new DateTimeFormatInfo()));
                     break;
-                case Formats.DMY:
+                case Format.DMY:
                     builder.Append(" " + date.ToString("MMMM, yyyy", new DateTimeFormatInfo()));
                     break;
             }
@@ -73,7 +74,7 @@ namespace Alexhokl.Helpers
 
     }
 
-    public enum Formats
+    public enum Format
     {
         DMY,
         DM,

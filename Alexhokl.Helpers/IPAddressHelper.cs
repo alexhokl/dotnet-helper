@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Alexhokl.Helpers
@@ -18,6 +15,11 @@ namespace Alexhokl.Helpers
         /// <exception cref="System.InvalidOperationException">Length of specified address and subnet mask does not match.</exception>
         public static IPAddress GetNetworkAddress(IPAddress address, IPAddress subnetMask)
         {
+            if (address == null)
+                throw new ArgumentNullException(nameof(address));
+            if (subnetMask == null)
+                throw new ArgumentNullException(nameof(subnetMask));
+
             byte[] addressBytes = address.GetAddressBytes();
             byte[] maskBytes = subnetMask.GetAddressBytes();
 

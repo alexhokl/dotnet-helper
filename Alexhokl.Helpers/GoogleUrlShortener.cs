@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -13,12 +12,14 @@ namespace Alexhokl.Helpers
         /// <summary>
         /// Returns a shortened URL from the specified <c>url</c> using Google Shortener <c>shortenerUrl</c>.
         /// </summary>
-        /// <see cref="https://developers.google.com/url-shortener/v1/getting_started"/>
         /// <param name="url">The URL to be shortened.</param>
         /// <param name="shortenerUrl">URL to Google Shortener.</param>
-        public static string GetShortenedUrl(string url, string shortenerUrl)
+        public static string GetShortenedUrl(Uri url, Uri shortenerUrl)
         {
-            HttpWebRequest request =
+            if (url == null)
+                throw new ArgumentNullException(nameof(url));
+
+            var request =
                 HttpWebRequest.Create(shortenerUrl)
                 as HttpWebRequest;
             request.Method = "POST";
@@ -30,7 +31,7 @@ namespace Alexhokl.Helpers
                 {
                     writer.WriteLine(
                         JsonConvert.SerializeObject(
-                            new { longUrl = url }));
+                            new { longUrl = url.ToString() }));
                 }
             }
 
