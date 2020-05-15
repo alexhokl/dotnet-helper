@@ -76,7 +76,7 @@ namespace Alexhokl.Helpers
 
             using (var alogrithm = GetHashAlogrithm(method))
             {
-            return alogrithm.ComputeHash(encoding.GetBytes(data));
+                return alogrithm.ComputeHash(encoding.GetBytes(data));
             }
         }
 
